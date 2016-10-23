@@ -1,0 +1,20 @@
+<h1>signup</h1>
+<form ng-submit ='validateForm()'>
+	<table>
+		<tr>
+			<td>email</td> <td><input ng-model='user.email' type="email"></td>
+		</tr>
+		<tr>
+			<td>password </td><td><input ng-model='user.password' type="password"></td>
+		</tr>
+		<tr>
+			<td>confirm password</td><td><input ng-model='user.conf_password' type="password"></td>
+		</tr>
+		<tr>
+			<td>company</td><td><input ng-model='user.company' type="text"></td>
+		</tr>
+		<tr>
+			<td><input  type="submit"></td>
+		</tr>
+	</table>
+</form>
