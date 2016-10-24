@@ -5,11 +5,11 @@ var bodyParser = require('body-parser');
 app.set('port', (process.env.PORT || 5000));
 var path = require( 'path' );
 app.use(bodyParser.json());
+
 var passport = require('passport');
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(express.static('public'));
-app.set('views', __dirname + '/public');
 app.use(require('express-session')({
   secret : 'keyboard-cat',
   resave : false,

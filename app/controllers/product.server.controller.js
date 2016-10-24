@@ -7,7 +7,7 @@ exports.getInfo = function (req, res) {
 		if(err) {
 			res.send({
 			error: 1,
-			msg : 'failed to get gifts',
+			msg : 'Error',
 			data : []
 			})
 		}
