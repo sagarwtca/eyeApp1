@@ -9,6 +9,7 @@ exports.loginApi = function (req, res) {
    
 
 db.find('user', obj , function(err, success){
+    console.log(success);
 		if(err) {
 			res.send({
 			error: 1,
@@ -17,10 +18,18 @@ db.find('user', obj , function(err, success){
 			})
 		}
 		else{
-			res.send({
-				error: 0,
-				msg :"success",
-			})
+			if(!success.length) {
+                res.send({
+			        error: 0,
+			        msg : 'user not found',
+			    })
+            }
+            else {
+                res.send({
+                    error: 0,
+                    msg :"success",
+                })
+            }
 		}
 	})
 
