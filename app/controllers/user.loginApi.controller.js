@@ -9,7 +9,6 @@ exports.loginApi = function (req, res) {
    
 
 db.find('usertest', obj , function(err, success){
-    console.log(success);
 		if(err) {
 			res.send({
 			error: 1,
@@ -29,7 +28,7 @@ db.find('usertest', obj , function(err, success){
                 res.send({
                     error: 0,
                     msg :"success",
-                    data : success
+                    data : success[0]
                 })
             }
 		}
