@@ -22,12 +22,14 @@ db.find('usertest', obj , function(err, success){
                 res.send({
 			        error: 0,
 			        msg : 'user not found',
+                    data : success
 			    })
             }
             else {
                 res.send({
                     error: 0,
                     msg :"success",
+                    data : success
                 })
             }
 		}
