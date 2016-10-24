@@ -8,7 +8,7 @@ exports.loginApi = function (req, res) {
 	}
    
 
-db.find('user', obj , function(err, success){
+db.find('usertest', obj , function(err, success){
     console.log(success);
 		if(err) {
 			res.send({

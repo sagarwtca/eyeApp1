@@ -5,7 +5,7 @@ exports.signup =  function(req, res ) {
 		"company" : req.body.company,
 		"password" : req.body.password
 	}
-	db.find('user', {'email':req.body.email}, function(err, exist) {
+	db.find('usertest', {'email':req.body.email}, function(err, exist) {
 		if(err) {
 			
 		}
