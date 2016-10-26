@@ -3,12 +3,13 @@ var FacebookStrategy = require('passport-facebook').Strategy;
 var socialConfig = require('./socialConfig');
 var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 var TwitterStrategy  = require('passport-twitter').Strategy;
+var db = require('../controllers/mongodb.js');
 
 module.exports = function( passport ) {
 
 	// used to serialize the user for the session
     passport.serializeUser(function(user, done) {
-        done(null, user.id);
+        done(null, user);
     });
 
     // used to deserialize the user
@@ -162,6 +163,50 @@ module.exports = function( passport ) {
     });
 */
     }));
+
+    //----------------------------------local-signup-------------------
+    passport.use('local-signup', new LocalStrategy({
+			// by default, local strategy uses username and password, we will override with email
+			passReqToCallback: true
+		},
+		function (req, email, password, done) {
+            	console.log(email);
+                console.log(password);
+    			process.nextTick(function () {
+                    console.log(email);
+                    console.log(password);
+
+			});
+		}));
+
+	passport.use('local-login', new LocalStrategy({
+			// by default, local strategy uses username and password, we will override with email
+			usernameField: 'email',
+			passwordField: 'password',
+			passReqToCallback: true
+		},
+		function (req, email, password, done) {
+            process.nextTick(function () {
+				try {
+					db.find("usertest", {"email": email}, function (err, result) {
+						if (err) {
+							return done(null);
+						} else {
+                            console.log(result);
+							if (result[0])
+								return done(null, result[0]);
+
+							return done(null);
+						}
+					})
+				} catch (err) {
+					return done(null);
+				}
+			});
+            
+            
+		}));
+
 
 };
  

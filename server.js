@@ -5,7 +5,8 @@ var bodyParser = require('body-parser');
 app.set('port', (process.env.PORT || 5000));
 var path = require( 'path' );
 app.use(bodyParser.json());
-
+var flash=require("connect-flash");
+app.use(flash());
 var passport = require('passport');
 app.use(passport.initialize());
 app.use(passport.session());
@@ -18,7 +19,7 @@ app.use(require('express-session')({
 require('./app/config/passport')(passport);
 require('./app/routes/user.server.routes')(app, passport);
 require('./app/routes/product.server.routes')(app);
-require('./app/routes/user.signup.routes')(app);
+require('./app/routes/user.signup.routes')(app, passport);
 app.get('/', function(req, res) {
 	res.render(path.join(__dirname + '/public/index.html'))
 })

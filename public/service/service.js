@@ -5,7 +5,7 @@ eyeApp.service('signupService', function ($http){
 					     
 					       method: 'post',
 					       url: 'api/user/signup',
-					       data: data
+					       data: data,
 					 }).then(function(result) {
                             return result.data;
                     });		
