@@ -5,7 +5,7 @@ module.exports = function ( app, passport ) {
 // app.post('/api/user/signup' , signupController.signup);
 app.post('/api/user/signup', passport.authenticate('local-signup', {
 		successRedirect : '/profile', // redirect to the secure profile section
-		failureRedirect : '/signup123', // redirect back to the signup page if there is an error
+		failureRedirect : '/signup', // redirect back to the signup page if there is an error
 		failureFlash : true // allow flash messages
 	}));
 

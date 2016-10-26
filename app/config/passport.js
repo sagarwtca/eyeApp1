@@ -166,16 +166,33 @@ module.exports = function( passport ) {
 
     //----------------------------------local-signup-------------------
     passport.use('local-signup', new LocalStrategy({
-			// by default, local strategy uses username and password, we will override with email
+            usernameField: 'email',
+			passwordField: 'password',
+			companyField : 'company',
+            // by default, local strategy uses username and password, we will override with email
 			passReqToCallback: true
 		},
 		function (req, email, password, done) {
-            	console.log(email);
-                console.log(password);
     			process.nextTick(function () {
-                    console.log(email);
-                    console.log(password);
+                     db.find('usertest', {"email":email}, function(err, result){
+                         if(err) {
+                             return done(err);
+                         }
+                         if(result.length) {
+                             console.log("-------->",result);
+                             return done(null, false, req.flash('signupMessage', 'That email is already taken.'));
+                         } else {
+                            db.insert('usertest', {"email":email, "password" :password, "company" :req.body.company}, function(err, result){
+                                console.log(err);
+                                if(err) {
+                                    return done(err);
+                                } else {
+                                    return done(null);
+                                }
+                            }) 
+                         }
 
+                     })   
 			});
 		}));
 
