@@ -17,13 +17,14 @@ app.get('/auth/facebook/callback', passport.authenticate('facebook-passport', {
     }), function (req, res) {})
 
  
- app.get('/api/user/google/callback', passport.authenticate('google-passport', {
+ app.get('/auth/google/callback', passport.authenticate('google-passport', {
         successRedirect: '/sociallogin',
         failureRedirect: '/error'
     }), function (req, res) {
-
     });
-
+app.get('/sociallogin', function(){
+    console.log("sagar-----------------------");
+})
   app.get("/api/user/twitterLogin", passport.authenticate('twitter-password'), function (req, res) {});
     
     app.get('/auth/twitter/callback', passport.authenticate('twitter-password', {

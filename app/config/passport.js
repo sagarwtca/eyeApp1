@@ -35,7 +35,7 @@ module.exports = function( passport ) {
 
         // asynchronous
         process.nextTick(function() {
-
+        console.log(profile);
             // find the user in the database based on their facebook id
             User.findOne({ 'facebook.id' : profile.id }, function(err, user) {
 
@@ -83,6 +83,7 @@ module.exports = function( passport ) {
     },
     function(token, refreshToken, profile, done) {
     	console.log(profile);
+        return done(null, profile)
         // make the code asynchronous
         // User.findOne won't fire until we have all our data back from Google
        /* process.nextTick(function() {
@@ -210,10 +211,12 @@ module.exports = function( passport ) {
 							return done(null);
 						} else {
                             console.log(result);
-							if (result[0])
+							if (result.length)
 								return done(null, result[0]);
-
-							return done(null);
+                            else {    
+                                console.log('error')
+							    return done(null);
+                            }
 						}
 					})
 				} catch (err) {
