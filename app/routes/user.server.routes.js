@@ -2,13 +2,16 @@ module.exports = function (app, passport) {
 
 
 
-app.get('/api/user/facebookLogin', passport.authenticate('facebook-passport'), function(req, res){});
+app.get('/api/user/facebookLogin', passport.authenticate('facebook-passport',{ scope : ['email'] }), function(req, res){});
 
 app.get('/auth/facebook/callback', passport.authenticate('facebook-passport', {
-	successRedirect : 'profile',
+	// successRedirect : 'profile',
 	failureRedirect	: "error", 
+     scope:['email']
 	}), function(req, res) {
-		res.redirect('index.html');
+		res.send({
+            "data": req.user
+        })
 	}
 );
 
@@ -18,9 +21,10 @@ app.get('/auth/facebook/callback', passport.authenticate('facebook-passport', {
 
  
  app.get('/auth/google/callback', passport.authenticate('google-passport', {
-        successRedirect: '/sociallogin',
+        // successRedirect: '/sociallogin',
         failureRedirect: '/error'
     }), function (req, res) {
+        res.send({"profile":req.user})
     });
 app.get('/sociallogin', function(){
     console.log("sagar-----------------------");

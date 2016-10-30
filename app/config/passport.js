@@ -27,47 +27,33 @@ module.exports = function( passport ) {
         clientID        : socialConfig.facebookAuth.appId,
         clientSecret    : socialConfig.facebookAuth.secretId,
         callbackURL     : socialConfig.facebookAuth.callback_URL,
-
+        profileFields: ['id', 'emails', 'name']
     },
 
     // facebook will send back the token and profile
     function(token, refreshToken, profile, done) {
-
         // asynchronous
         process.nextTick(function() {
-        console.log(profile);
-            // find the user in the database based on their facebook id
-            User.findOne({ 'facebook.id' : profile.id }, function(err, user) {
+                  db.find('usertest', {"email":profile.emails[0].value}, function(err, result){
+                         if(err) {
+                             return done(err);
+                         }
+                         if(result.length) {
+                             console.log('fad')
+                                return done(null, profile);
+                         } else {
+                            db.insert('usertest', {"email":profile.emails[0].value, }, function(err, result){
+                                console.log();
+                                if(err) {
+                                    return done(err);
+                                } else {
+                                    return done(null);
+                                }
+                            }) 
+                         }
 
-                // if there is an error, stop everything and return that
-                // ie an error connecting to the database
-                if (err)
-                    return done(err);
+                     })   
 
-                // if the user is found, then log them in
-                if (user) {
-                    return done(null, user); // user found, return that user
-                } else {
-                    // if there is no user found with that facebook id, create them
-                    var newUser            = new User();
-
-                    // set all of the facebook information in our user model
-                    newUser.facebook.id    = profile.id; // set the users facebook id                   
-                    newUser.facebook.token = token; // we will save the token that facebook provides to the user                    
-                    newUser.facebook.name  = profile.name.givenName + ' ' + profile.name.familyName; // look at the passport user profile to see how names are returned
-                    newUser.facebook.email = profile.emails[0].value; // facebook can return multiple emails so we'll take the first
-
-                    // save our user to the database
-                    newUser.save(function(err) {
-                        if (err)
-                            throw err;
-
-                        // if successful, return the new user
-                        return done(null, newUser);
-                    });
-                }
-
-            });
         });
 
     }));
@@ -83,39 +69,26 @@ module.exports = function( passport ) {
     },
     function(token, refreshToken, profile, done) {
     	console.log(profile);
-        return done(null, profile)
-        // make the code asynchronous
-        // User.findOne won't fire until we have all our data back from Google
-       /* process.nextTick(function() {
+               process.nextTick(function() {
+                  db.find('usertest', {"email":profile.emails[0].value}, function(err, result){
+                         if(err) {
+                             return done(err);
+                         }
+                         if(result.length) {
+                                return done(null, profile);
+                         } else {
+                            db.insert('usertest', {"email":profile.emails[0].value, }, function(err, result){
+                                if(err) {
+                                    return done(err);
+                                } else {
+                                    return done(null);
+                                }
+                            }) 
+                         }
 
-            // try to find the user based on their google id
-            User.findOne({ 'google.id' : profile.id }, function(err, user) {
-                if (err)
-                    return done(err);
+                     })   
 
-                if (user) {
-
-                    // if a user is found, log them in
-                    return done(null, user);
-                } else {
-                    // if the user isnt in our database, create a new user
-                    var newUser          = new User();
-
-                    // set all of the relevant information
-                    newUser.google.id    = profile.id;
-                    newUser.google.token = token;
-                    newUser.google.name  = profile.displayName;
-                    newUser.google.email = profile.emails[0].value; // pull the first email
-
-                    // save the user
-                    newUser.save(function(err) {
-                        if (err)
-                            throw err;
-                        return done(null, newUser);
-                    });
-                }
-            });
-        });*/
+        });
 
     }));
 ///-----------------------Twitter--------------------------------------
@@ -210,9 +183,13 @@ module.exports = function( passport ) {
 						if (err) {
 							return done(null);
 						} else {
-                            console.log(result);
-							if (result.length)
-								return done(null, result[0]);
+                            
+							if (result.length) {                            
+                                if(result[0].password== password) {
+								   console.log(result);
+                                    return done(null, result[0]);
+                                }
+                            }
                             else {    
                                 console.log('error')
 							    return done(null);
